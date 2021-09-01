@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Strona Stajni XXXXX</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <link href='fullcalendar/main.css' rel='stylesheet'/>
+
+    <script src='fullcalendar/main.js'></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                },
+                initialDate: '2021-06-11',
+                navLinks: true, // can click day/week names to navigate views
+                businessHours: true, // display business hours
+                editable: true,
+                selectable: true,
+                events: [
+                    {
+                        title: 'Business Lunch',
+                        start: '2021-06-11T13:00:00',
+                        constraint: 'businessHours'
+                    },
+                    {
+                        title: 'Meeting',
+                        start: '2021-06-13T11:00:00',
+                        constraint: 'availableForMeeting', // defined below
+                        color: '#257e4a'
+                    },
+                    {
+                        title: 'Conference',
+                        start: '2021-06-18',
+                        end: '2021-06-20'
+                    },
+                    {
+                        title: 'Party',
+                        start: '2021-08-29T20:00:00'
+                    },
+
+                    // areas where "Meeting" must be dropped
+                    {
+                        groupId: 'availableForMeeting',
+                        start: '2021-06-11T10:00:00',
+                        end: '2021-06-11T16:00:00',
+                        display: 'background'
+                    },
+                    {
+                        groupId: 'availableForMeeting',
+                        start: '2021-06-13T10:00:00',
+                        end: '2021-06-13T16:00:00',
+                        display: 'background'
+                    },
+
+                    // red areas where no events can be dropped
+                    {
+                        start: '2021-06-24',
+                        end: '2021-06-28',
+                        overlap: false,
+                        display: 'background',
+                        color: '#ff9f89'
+                    },
+                    {
+                        start: '2021-06-06',
+                        end: '2021-06-08',
+                        overlap: false,
+                        display: 'background',
+                        color: '#ff9f89'
+                    }
+                ]
+            });
+
+            calendar.render();
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#myPage">
+                <img src="logo2.png" alt="" width="150" height="30">
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="index.html#onas">O NAS</a></li>
+                <li><a href="index.html#pensjonat">PENSJONAT</a></li>
+                <li><a href="index.html#galeria">GALERIA</a></li>
+                <li><a href="index.html#zawody">ZAWODY JEŹDZIECKIE</a></li>
+                <li><a href="kalendarz.html">KALENDARZ</a></li>
+                <li><a href="index.html#kontakt">KONTAKT</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h5>KALENDARZ</h5>
+        <p class="text">Tutaj znajdziesz wszystkie wydarzenia odbywające się w naszym ośrodku</p>
+		<p class="text">W celu zapisania się na jazdy wybierz "Zaloguj się"</p>
+		<a href = 'logowanie.php'><button type="button" class="btn btn-dark"><span style="color: white">Zaloguj się</span></button></a>
+        <button type="button" class="btn btn-dark"data-toggle="modal" data-target="#addEvent">Dodaj wydarzenie</button>
+    </div>
+</div>
+<div class="modal fade" id="addEvent" role="dialog">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4><span class="glyphicon glyphicon-lock"></span> Dodaj wydarzenie</h4>
+        </div>
+        <div class="modal-body">
+            <form role="form">
+                <div class="form-group">
+                    <label for="klasa">Wybierz rodzaj wydarzenia</label>
+                    <select class="form-control" id="klasa">
+                        <option>Trening skokowy</option>
+                        <option>Trening ujeżdżeniowy</option>
+                        <option>Wyjazd w teren</option>
+                        <option>Zawody ujeżdżeniowe</option>
+                        <option>Zawody w skokach</option>
+                        <option>Konsultacje</option>
+                        <option>Egzaminy na odznaki</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="event"> Nazwa wydarzenia: </label>
+                    <input type="text" class="form-control" id="event" placeholder="nazwa wydarzenia">
+                    <label for="name"> Osoba odpowiedzialna: </label>
+                    <input type="text" class="form-control" id="name" placeholder="Imię i nazwisko">
+                    <label for="datetime" class="col-2 col-form-label">Data i godzina</label>
+                    <div class="col-10">
+                        <input class="form-control" type="datetime-local" value="2011-08-19T13:45:00"
+                               id="datetime">
+                    </div>
+                    <label for="max_osob" class="col-2 col-form-label">Maksymalna liczba osób:</label>
+                    <div class="col-10">
+                        <input class="form-control" type="number" value="42" id="max_osob">
+                    </div>
+                    <label for="uwagi"> Uwagi: </label>
+                    <input type="text" class="form-control" id="uwagi" placeholder="Uwagi">
+                </div>
+                <button type="submit" class="btn btn-block">Dodaj wydarzenie
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<div id='calendar' class="bg-2"></div>
+
+<footer class="text-center">
+    <a class="up-arrow" href="kalendarz.html" data-toggle="tooltip" title="TO TOP">
+        <span class="glyphicon glyphicon-chevron-up"></span>
+    </a><br><br>
+    <p>Stajnia XXXXXX </p>
+</footer>
+
+</body>
+</html>

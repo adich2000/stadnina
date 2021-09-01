@@ -4,12 +4,20 @@ session_start();
 include('include/config.php');
 include('include/sprawdz_login.php');
 check_login();
+$id=intval($_GET['id']);// get value
+date_default_timezone_set('Europe/Warsaw');// change according timezone
+$currentTime = date( 'd-m-Y h:i:s A', time () );
+if(isset($_POST['submit']))
+{
+$sql=mysql_query("update specjalizacje_instruktorow set specjalizacja='".$_POST['specjalizacje_instruktorow']."', data_aktualizacji='$currentTime'where id='$id'");
+$_SESSION['msg']="Specjalizacja instruktora zaktualizowana pomyślnie !!!";
+}
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Admin | Strona główna</title>
+		<title>Admin | Zmiana specjalizacji Instruktora</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -30,8 +38,6 @@ check_login();
 		<link rel="stylesheet" href="assets/css/styles.css">
 		<link rel="stylesheet" href="assets/css/plugins.css">
 		<link rel="stylesheet" href="assets/css/themes/theme-1.css" id="skin_color" />
-
-
 	</head>
 	<body>
 		<div id="app">		
@@ -39,90 +45,79 @@ check_login();
 			<div class="app-content">
 				
 						<?php include('include/header.php');?>
-						
-				
+					
 				<div class="main-content" >
 					<div class="wrap-content container" id="container">
 						
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
-									<h1 class="mainTitle">Admin | Strona główna</h1>
+									<h1 class="mainTitle">Admin | Zmiana sepcjalizacji Instruktora</h1>
 																	</div>
 								<ol class="breadcrumb">
 									<li>
 										<span>Admin</span>
 									</li>
 									<li class="active">
-										<span>Strona główna</span>
+										<span>Zmiana danych Instruktora</span>
 									</li>
 								</ol>
 							</div>
 						</section>
 						
-							<div class="container-fluid container-fullw bg-white">
+						<div class="container-fluid container-fullw bg-white">
 							<div class="row">
-								<div class="col-sm-4">
-									<div class="panel panel-white no-radius text-center">
-										<div class="panel-body">
-											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-smile-o fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle">Zarządzaj kursantami</h2>
-											
-											<p class="links cl-effect-1">
-												<a href="zarzadzanie_kursantami.php">
-												<?php $result = mysql_query("SELECT * FROM kursanci ");
-$num_rows = mysql_num_rows($result);
-{
-?>
-											Wszyscy kursanci :<?php echo htmlentities($num_rows);  } ?>		
-												</a>
-											</p>
+								<div class="col-md-12">
+									
+									<div class="row margin-top-30">
+										<div class="col-lg-6 col-md-12">
+											<div class="panel panel-white">
+												<div class="panel-heading">
+													<h5 class="panel-title">Zmiana specjalizacji Instruktora</h5>
+												</div>
+												<div class="panel-body">
+								<p style="color:red;"><?php echo htmlentities($_SESSION['msg']);?>
+								<?php echo htmlentities($_SESSION['msg']="");?></p>	
+													<form role="form" name="dcotorspcl" method="post" >
+														<div class="form-group">
+															<label for="exampleInputEmail1">
+																Zmiana specjalizacji Instruktora
+															</label>
+
+	<?php 
+
+$id=intval($_GET['id']);
+	$sql=mysql_query("select * from specjalizacje_instruktorow where id='$id'");
+while($row=mysql_fetch_array($sql))
+{														
+	?>		<input type="text" name="specjalizacje_instruktorow" class="form-control" value="<?php echo $row['specilization'];?>" >
+	<?php } ?>
+														</div>										
+														
+														
+														<button type="submit" name="submit" class="btn btn-o btn-primary">
+															Zaktualizuj
+														</button>
+													</form>
+												</div>
+											</div>
 										</div>
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="panel panel-white no-radius text-center">
-										<div class="panel-body">
-											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-users fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle">Zarządzaj instruktorami</h2>
-										
-											<p class="cl-effect-1">
-												<a href="zarzadzanie_instruktorami.php">
-												<?php $result1 = mysql_query("SELECT * FROM instruktorzy ");
-$num_rows1 = mysql_num_rows($result1);
-{
-?>
-											Wszyscy instruktorzy :<?php echo htmlentities($num_rows1);  } ?>		
-												</a>
+											
+											</div>
+										</div>
+									<div class="col-lg-12 col-md-12">
+											<div class="panel panel-white">
 												
-											</p>
+												
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="panel panel-white no-radius text-center">
-										<div class="panel-body">
-											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-terminal fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle"> Rezerwacje</h2>
-											
-											<p class="links cl-effect-1">
-												<a href="book-appointment.php">
-													<a href="historia_rezerwacji.php">
-												<?php $sql= mysql_query("SELECT * FROM rezerwacje");
-$num_rows2 = mysql_num_rows($sql);
-{
-?>
-											Wszystkie rezerwacje :<?php echo htmlentities($num_rows2);  } ?>	
-												</a>
-												</a>
-											</p>
-										</div>
-									</div>
+
+									
 								</div>
 							</div>
 						</div>
-			
-					
+						
 					</div>
 				</div>
 			</div>

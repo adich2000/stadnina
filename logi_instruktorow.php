@@ -1,18 +1,14 @@
 <?php
 session_start();
+//error_reporting(0);
 include('include/config.php');
 include('include/sprawdz_login.php');
 check_login();
-if(isset($_GET['cancel']))
-		  {
-		          mysql_query("update rezerwacje set status_instruktora='0' where id = '".$_GET['id']."'");
-                  $_SESSION['msg']="Twoja rezerwacja została odwołana!!!";
-		  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Kursanci | Historia rezerwacji</title>
+		<title>Admin | Logi Instruktorów</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -38,23 +34,24 @@ if(isset($_GET['cancel']))
 		<div id="app">		
 <?php include('include/pasek_boczny.php');?>
 			<div class="app-content">
+				
 
 					<?php include('include/header.php');?>
-			
+				
 				<div class="main-content" >
 					<div class="wrap-content container" id="container">
 						
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
-									<h1 class="mainTitle">Kursanci | Historia rezerwacji</h1>
+									<h1 class="mainTitle">Admin | Logi Instruktorów</h1>
 																	</div>
 								<ol class="breadcrumb">
 									<li>
-										<span>Kursanci</span>
+										<span>Admin </span>
 									</li>
 									<li class="active">
-										<span>Historia rezerwacji</span>
+										<span>Logi Instruktorów</span>
 									</li>
 								</ol>
 							</div>
@@ -72,20 +69,19 @@ if(isset($_GET['cancel']))
 										<thead>
 											<tr>
 												<th class="center">#</th>
-												<th class="hidden-xs">Imię i nazwisko instruktora</th>
-												<th>Imię i nazwisko kursanta</th>
-												<th>Specjalizacja</th>
-												<th>Cena</th>
-												<th>Data/godzina rezerwacji</th>
-												<th>Data utworzenia rezerwacji</th>
-												<th>Aktualny status</th>
-												<th>Akcja</th>
+												<th class="hidden-xs">Id użytkownika</th>
+												<th>Nazwa użytkownika</th>
+												<th>IP użytkownika</th>
+												<th>Czas zalogowania</th>
+												<th>Czas wylogowania</th>
+												<th> Status </th>
+												
 												
 											</tr>
 										</thead>
 										<tbody>
 <?php
-$sql=mysql_query("select instruktorzy.imie_nazwisko_instruktora as instr_name, kursanci.imie_nazwisko_kursanta as kurs_name, rezerwacje.*  from rezerwacje join instruktorzy on instruktorzy.id=rezerwacje.id_instruktora join kursanci on kursanci.id=rezerwacje.id_kursanta");
+$sql=mysql_query("select * from logi_instruktorow ");
 $cnt=1;
 while($row=mysql_fetch_array($sql))
 {
@@ -93,68 +89,25 @@ while($row=mysql_fetch_array($sql))
 
 											<tr>
 												<td class="center"><?php echo $cnt;?>.</td>
-												<td class="hidden-xs"><?php echo $row['instr_name'];?></td>
-												<td class="hidden-xs"><?php echo $row['kurs_name'];?></td>
-												<td><?php echo $row['specjalizacja_instruktora'];?></td>
-												<td><?php echo $row['cena'];?></td>
-												<td><?php echo $row['data_rezerwacji'];?> / <?php echo
-												 $row['czas_rezerwacji'];?>
+												<td class="hidden-xs"><?php echo $row['id_instruktora'];?></td>
+												<td class="hidden-xs"><?php echo $row['nazwa_uzytkownika'];?></td>
+												<td><?php echo $row['ip_uzytkownika'];?></td>
+												<td><?php echo $row['data_logowania'];?></td>
+												<td><?php echo $row['wylogowanie'];?>
 												</td>
-												<td><?php echo $row['data_rezerwowania'];?></td>
+												
 												<td>
-<?php if(($row['status_kursanta']==1) && ($row['status_instruktora']==1))  
+<?php if($row['status']==1)
 {
-	echo "Zarejestrowany";
+	echo "Sukces";
 }
-if(($row['status_kursanta']==0) && ($row['status_instruktora']==1))  
+else
 {
-	echo "Anulowany przez kursanta";
-}
+	echo "Nie udało się";
+}?>
 
-if(($row['status_kursanta']==1) && ($row['status_instruktora']==0))  
-{
-	echo "Anulowany przez instruktora";
-}
-
-
-
-												?></td>
-												<td >
-												<div class="visible-md visible-lg hidden-sm hidden-xs">
-							<?php if(($row['status_kursanta']==1) && ($row['status_instruktora']==1))  
-{ ?>
-
-													
-	<a href="historia_rezerwacji.php?id=<?php echo $row['id']?>&cancel=update" onClick="return confirm('Czy na pewno chcesz odwołać to spotkanie?')"class="btn btn-transparent btn-xs tooltips" title="Cancel Appointment" tooltip-placement="top" tooltip="Remove">Anuluj</a>
-	<?php } else {
-
-		echo "Anulowano";
-		} ?>
-												</div>
-												<div class="visible-xs visible-sm hidden-md hidden-lg">
-													<div class="btn-group" dropdown is-open="status.isopen">
-														<button type="button" class="btn btn-primary btn-o btn-sm dropdown-toggle" dropdown-toggle>
-															<i class="fa fa-cog"></i>&nbsp;<span class="caret"></span>
-														</button>
-														<ul class="dropdown-menu pull-right dropdown-light" role="menu">
-															<li>
-																<a href="#">
-																	Edit
-																</a>
-															</li>
-															<li>
-																<a href="#">
-																	Share
-																</a>
-															</li>
-															<li>
-																<a href="#">
-																	Remove
-																</a>
-															</li>
-														</ul>
-													</div>
-												</div></td>
+</td>
+												
 											</tr>
 											
 											<?php 
@@ -168,11 +121,9 @@ $cnt=$cnt+1;
 							</div>
 								</div>
 						
-						
 					</div>
 				</div>
 			</div>
-
 		</div>
 		
 		<script src="vendor/jquery/jquery.min.js"></script>

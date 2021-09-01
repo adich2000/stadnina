@@ -4,27 +4,29 @@ session_start();
 include('include/config.php');
 include('include/sprawdz_login.php');
 check_login();
-date_default_timezone_set('Europe/Warsaw');
-$currentTime = date( 'd-m-Y h:i:s A', time () );
+
 if(isset($_POST['submit']))
 {
-$sql=mysql_query("SELECT haslo FROM admin where haslo='".$_POST['cpass']."' && nazwa_uzytkownika='".$_SESSION['login']."'");
-$num=mysql_fetch_array($sql);
-if($num>0)
+	$specjalizacje_instruktorow=$_POST['specjalizacje_instruktorow'];
+$imie_nazwisko_instruktora=$_POST['imie_nazwisko_instruktora'];
+$adres=$_POST['adres'];
+$cena=$_POST['cena'];
+$nr_telefonu=$_POST['nr_telefonu'];
+$email_instruktora=$_POST['email_instruktora'];
+$haslo=md5($_POST['npass']);
+$sql=mysql_query("insert into instruktorzy(specjalizacja,imie_nazwisko_instruktora,adres,cena,nr_telefonu,email_instruktora,haslo) values('$specjalizacje_instruktorow','$imie_nazwisko_instruktora','$adres','$cena','$nr_telefonu','$email_instruktora','$haslo')");
+if($sql)
 {
- $con=mysql_query("update admin set haslo='".$_POST['npass']."', data_aktualizacji='$currentTime' where nazwa_uzytkownika='".$_SESSION['login']."'");
-$_SESSION['msg1']="Hasło zostało zmienione pomyślnie !!!";
-}
-else
-{
-$_SESSION['msg1']="Bieżące hasło jest błędne!!!";
+echo "<script>alert('Informacje o instruktorze dodane pomyślnie');</script>";
+echo "<script type='text/javascript'> document.location = 'location:zarządzanie_instruktorami.php'; </script>";
+
 }
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Admin | Zmiana hasła</title>
+		<title>Admin | Dodaj Instruktora</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -48,28 +50,10 @@ $_SESSION['msg1']="Bieżące hasło jest błędne!!!";
 <script type="text/javascript">
 function valid()
 {
-if(document.chngpwd.cpass.value=="")
-{
-alert("Bieżące hasło jest puste !!!");
-document.chngpwd.cpass.focus();
-return false;
-}
-else if(document.chngpwd.npass.value=="")
-{
-alert("Nowe hasło jest puste !!!");
-document.chngpwd.npass.focus();
-return false;
-}
-else if(document.chngpwd.cfpass.value=="")
-{
-alert("Potwierdź hasło jest puste !!!");
-document.chngpwd.cfpass.focus();
-return false;
-}
-else if(document.chngpwd.npass.value!= document.chngpwd.cfpass.value)
+ if(document.adddoc.npass.value!= document.adddoc.cfpass.value)
 {
 alert("Pole Hasło i Potwierdź hasło nie zgadzają się !!!");
-document.chngpwd.cfpass.focus();
+document.adddoc.cfpass.focus();
 return false;
 }
 return true;
@@ -83,23 +67,21 @@ return true;
 			<div class="app-content">
 				
 						<?php include('include/header.php');?>
-		
-				</header>
-			
+						
 				<div class="main-content" >
 					<div class="wrap-content container" id="container">
 						
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
-									<h1 class="mainTitle">Admin | Zmiana hasła</h1>
+									<h1 class="mainTitle">Admin - Dodaj Instruktora</h1>
 																	</div>
 								<ol class="breadcrumb">
 									<li>
 										<span>Admin</span>
 									</li>
 									<li class="active">
-										<span>Zmiana hasła</span>
+										<span>Dodaj Instruktora</span>
 									</li>
 								</ol>
 							</div>
@@ -113,36 +95,85 @@ return true;
 										<div class="col-lg-8 col-md-12">
 											<div class="panel panel-white">
 												<div class="panel-heading">
-													<h5 class="panel-title">Zmiana hasła</h5>
+													<h5 class="panel-title">Dodaj Instruktora</h5>
 												</div>
 												<div class="panel-body">
-								<p style="color:red;"><?php echo htmlentities($_SESSION['msg1']);?>
-								<?php echo htmlentities($_SESSION['msg1']="");?></p>	
-													<form role="form" name="chngpwd" method="post" onSubmit="return valid();">
+									
+													<form role="form" name="adddoc" method="post" onSubmit="return valid();">
 														<div class="form-group">
-															<label for="exampleInputEmail1">
-																Obecne hasło
+															<label for="specjalizacje_instruktorow">
+																Specjalizacja Instruktora
 															</label>
-							<input type="password" name="cpass" class="form-control"  placeholder="Wprowadź obecne hasło">
+							<select name="specjalizacje_instruktorow" class="form-control" required="required">
+																<option value="">Wybierz specjalizację</option>
+<?php $ret=mysql_query("select * from specjalizacje_instruktorow");
+while($row=mysql_fetch_array($ret))
+{
+?>
+																<option value="<?php echo htmlentities($row['specjalizacja']);?>">
+																	<?php echo htmlentities($row['specjalizacja']);?>
+																</option>
+																<?php } ?>
+																
+															</select>
 														</div>
-														<div class="form-group">
-															<label for="exampleInputPassword1">
-																Nowe hasło
+
+<div class="form-group">
+															<label for="imie_nazwisko_instruktora">
+																 Imię i nazwisko Instruktora
 															</label>
-					<input type="password" name="npass" class="form-control"  placeholder="Wprowadź nowe hasło">
+					<input type="text" name="imie_nazwisko_instruktora" required="required" class="form-control"  placeholder="Imię i nazwisko instruktora">
+														</div>
+
+
+<div class="form-group">
+															<label for="adres">
+																 Adres Instruktora
+															</label>
+					<textarea name="adres" class="form-control" required="required" placeholder="Adres Instruktora"></textarea>
+														</div>
+<div class="form-group">
+															<label for="fess">
+																 Cena lekcji 
+															</label>
+					<input type="text" name="cena" class="form-control" required="required" placeholder="Cena lekcji">
+														</div>
+	
+<div class="form-group">
+									<label for="fess">
+																 Telefon Instruktora
+															</label>
+					<input type="text" name="nr_telefonu" class="form-control" required="required" placeholder="Telefon Instruktora">
+														</div>
+
+<div class="form-group">
+									<label for="fess">
+																 Email Instruktora
+															</label>
+					<input type="email" name="email_instruktora" class="form-control" required="required" placeholder="Email Instruktora">
+														</div>
+
+
+
+														
+														<div class="form-group">
+															<label for="exampleInputhaslo1">
+																 Hasło
+															</label>
+					<input type="password" name="npass" class="form-control"  placeholder="Hasło" required="required">
 														</div>
 														
 <div class="form-group">
-															<label for="exampleInputPassword1">
+															<label for="exampleInputhaslo2">
 																Potwierdź hasło
 															</label>
-									<input type="password" name="cfpass" class="form-control"  placeholder="Potwierdź hasło">
+									<input type="password" name="cfpass" class="form-control"  placeholder="Potwierdź hasło" required="required">
 														</div>
 														
 														
 														
 														<button type="submit" name="submit" class="btn btn-o btn-primary">
-															Zatwierdź
+															Zatwiedź
 														</button>
 													</form>
 												</div>

@@ -8,10 +8,10 @@ $miasto=$_POST['miasto'];
 $plec=$_POST['plec'];
 $email=$_POST['email'];
 $haslo=md5($_POST['haslo']);
-$query=mysql_query("insert into kursanci (imie_nazwisko_kursanta,adres,miasto,plec,email,haslo) values('$imie_nazwisko_kursanta','$adres','$miasto','$plec','$email','$haslo')");
+$query=mysql_query("insert into kursanci(imie_nazwisko_kursanta,adres,miasto,plec,email,haslo) values('$imie_nazwisko_kursanta','$adres','$miasto','$plec','$email','$haslo')");
 if($query)
 {
-	echo "<script>alert('Pomyślnie zarejestrowano. Możesz się teraz zalogować');</script>";
+	echo "<script>alert(' Pomyślnie zarejestrowany.  Możesz się teraz zalogować);</script>";
 }
 }
 ?>
@@ -21,7 +21,7 @@ if($query)
 <html lang="en">
 
 	<head>
-		<title>Logowanie-kursanta</title>
+		<title>Rejestracja Kursantów</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -39,24 +39,27 @@ if($query)
 		<link rel="stylesheet" href="assets/css/plugins.css">
 		<link rel="stylesheet" href="assets/css/themes/theme-1.css" id="skin_color" />
 		
+		
+		
 
 	</head>
 
 	<body class="login">
+		
 		<div class="row">
 			<div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
 				<div class="logo margin-top-30">
-				<h2>Rejestracja kursanta</h2>
+					<img src="assets/images/logo.png" alt="Clip-Two"/>
 				</div>
+				
 				<div class="box-register">
 					<form name="registration" id="registration"  method="post">
 						<fieldset>
 							<legend>
 								Zarejestruj się
 							</legend>
-						
 							<p>
-								Wpisz swoje dane poniżej:
+								Wpisz poniżej swoje dane osobowe:
 							</p>
 							<div class="form-group">
 								<input type="text" class="form-control" name="imie_nazwisko_kursanta" placeholder="Imię i nazwisko" required>
@@ -72,18 +75,18 @@ if($query)
 									Płeć
 								</label>
 								<div class="clip-radio radio-primary">
-									<input type="radio" id="rg-female" name="plec" value="K" >
+									<input type="radio" id="rg-female" name="plec" value="Kobieta" >
 									<label for="rg-female">
 										Kobieta
 									</label>
-									<input type="radio" id="rg-male" name="plec" value="M">
+									<input type="radio" id="rg-male" name="plec" value="Mężczyzna">
 									<label for="rg-male">
 										Mężczyzna
 									</label>
 								</div>
 							</div>
 							<p>
-								Wpisz poniżej szczegóły dotyczące twojego konta:
+								Wpisz poniżej dane swojego konta:
 							</p>
 							<div class="form-group">
 								<span class="input-icon">
@@ -93,36 +96,36 @@ if($query)
 							</div>
 							<div class="form-group">
 								<span class="input-icon">
-									<input type="password" class="form-control" id="haslo" name="haslo" placeholder="Hasło" required>
+									<input type="haslo" class="form-control" id="haslo" name="haslo" placeholder="Hasło" required>
 									<i class="fa fa-lock"></i> </span>
 							</div>
 							<div class="form-group">
 								<span class="input-icon">
-									<input type="password" class="form-control" name="password_again" placeholder="Hasło" required>
+									<input type="haslo" class="form-control" name="haslo_again" placeholder="Hasło ponownie" required>
 									<i class="fa fa-lock"></i> </span>
 							</div>
-			
 							<div class="form-group">
 								<div class="checkbox clip-check check-primary">
-									<input type="checkbox" id="agree" value="agree" required>
+									<input type="checkbox" id="agree" value="agree">
 									<label for="agree">
-										Wyrażam zgodę
+										Wyrażam zgodę.
 									</label>
 								</div>
 							</div>
 							<div class="form-actions">
 								<p>
-									Posiadasz już konto?
-									<a href="kursant_logowanie.php">
+									Masz już konto?
+									<a href="user-login.php">
 										Zaloguj się
 									</a>
 								</p>
 								<button type="submit" class="btn btn-primary pull-right" id="submit" name="submit">
-									Potwierdź <i class="fa fa-arrow-circle-right"></i>
+									Prześlij <i class="fa fa-arrow-circle-right"></i>
 								</button>
 							</div>
 						</fieldset>
 					</form>
+
 				</div>
 
 			</div>
@@ -160,4 +163,5 @@ error:function (){}
 </script>	
 		
 	</body>
+	
 </html>

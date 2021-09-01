@@ -2,17 +2,15 @@
 session_start();
 include('include/config.php');
 include('include/sprawdz_login.php');
-check_login();
-date_default_timezone_set('Europe/Warsaw');
-$currentTime = date( 'd-m-Y h:i:s A', time () );
 if(isset($_POST['submit']))
 {
-$imie_nazwisko_kursanta=$_POST['imie_nazwisko_kursanta'];
+$specjalizacje_instr=$_POST['specjalizacjeInstr'];
+$imie_nazwisko_instruktora=$_POST['imie_nazwisko_instruktora'];
 $adres=$_POST['adres'];
-$miasto=$_POST['miasto'];
-$plec=$_POST['plec'];
-
-$sql=mysql_query("Update kursanci set imie_nazwisko_kursanta='$imie_nazwisko_kursanta',adres='$adres',miasto='$miasto',plec='$plec', data_aktualizacji='$currentTime' where email='".$_SESSION['login']."'");
+$cena=$_POST['cena'];
+$nr_telefonu=$_POST['nr_telefonu'];
+$email_instruktora=$_POST['email_instruktora'];
+$sql=mysql_query("Update instruktorzy set specjalizacja='$specjalizacje_instr',imie_nazwisko_instruktora='$imie_nazwisko_instruktora',adres='$adres',cena='$cena',nr_telefonu='$nr_telefonu',email_instruktora='$email_instruktora' where email_instruktora='".$_SESSION['dlogin']."'");
 if($sql)
 {
 echo "<script>alert('Twój profil został pomyślnie zaktualizowany');</script>";
@@ -23,7 +21,7 @@ echo "<script>alert('Twój profil został pomyślnie zaktualizowany');</script>"
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Kursant | Edycja profilu</title>
+		<title>Instruktor | Edycja profilu</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,20 +49,18 @@ echo "<script>alert('Twój profil został pomyślnie zaktualizowany');</script>"
 		<div id="app">		
 <?php include('include/pasek_boczny.php');?>
 			<div class="app-content">
-				
-						<?php include('include/header.php');?>
-						
+				<?php include('include/header.php');?>
 				<div class="main-content" >
 					<div class="wrap-content container" id="container">
 						
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
-									<h1 class="mainTitle">Kursant | Edycja profilu</h1>
+									<h1 class="mainTitle">Instruktor | Edycja profilu</h1>
 																	</div>
 								<ol class="breadcrumb">
 									<li>
-										<span>Kursant </span>
+										<span>Instruktor</span>
 									</li>
 									<li class="active">
 										<span>Edycja profilu</span>
@@ -81,50 +77,70 @@ echo "<script>alert('Twój profil został pomyślnie zaktualizowany');</script>"
 										<div class="col-lg-8 col-md-12">
 											<div class="panel panel-white">
 												<div class="panel-heading">
-													<h5 class="panel-title">Edycja profilu</h5>
+													<h5 class="panel-title">Edytuj Instruktora</h5>
 												</div>
 												<div class="panel-body">
-									<?php $sql=mysql_query("select * from kursanci where email='".$_SESSION['login']."'");
+									<?php $sql=mysql_query("select * from instruktorzy where email_instruktora='".$_SESSION['dlogin']."'");
 while($data=mysql_fetch_array($sql))
 {
 ?>
-													<form role="form" name="edit" method="post">
-													
+													<form role="form" name="adddoc" method="post" onSubmit="return valid();">
+														<div class="form-group">
+															<label for="specjalizacjeInstr">
+																Specjalizacja Instruktora
+															</label>
+							<select name="specjalizacjeInstr" class="form-control" required="required">
+					<option value="<?php echo htmlentities($data['specjalizacja']);?>">
+					<?php echo htmlentities($data['specjalizacja']);?></option>
+<?php $ret=mysql_query("select * from specjalizacje_instruktorow");
+while($row=mysql_fetch_array($ret))
+{
+?>
+																<option value="<?php echo htmlentities($row['specjalizacja']);?>">
+																	<?php echo htmlentities($row['specjalizacja']);?>
+																</option>
+																<?php } ?>
+																
+															</select>
+														</div>
 
 <div class="form-group">
-															<label for="imie_nazwisko_kursanta">
-																 Nazwa użytkownika
+															<label for="imie_nazwisko_instruktora">
+																 Imię i nazwisko Instruktora
 															</label>
-	<input type="text" name="imie_nazwisko_kursanta" class="form-control" required="required" value="<?php echo htmlentities($data['imie_nazwisko_kursanta']);?>" >
+	<input type="text" name="imie_nazwisko_instruktora" class="form-control" value="<?php echo htmlentities($data['imie_nazwisko_instruktora']);?>" >
 														</div>
 
 
 <div class="form-group">
 															<label for="adres">
-																 Adres
+																 Adres Instruktora
 															</label>
 					<textarea name="adres" class="form-control"><?php echo htmlentities($data['adres']);?></textarea>
 														</div>
 <div class="form-group">
-															<label for="miasto">
-																 Miasto
+															<label for="cena">
+																 Cena lekcji Instruktora
 															</label>
-		<input type="text" name="miasto" class="form-control" required="required"  value="<?php echo htmlentities($data['miasto']);?>" >
+		<input type="text" name="cena" class="form-control" required="required" readonly="readonly" value="<?php echo htmlentities($data['cena']);?>" >
 														</div>
 	
 <div class="form-group">
-									<label for="plec">
-																Płeć
+									<label for="fess">
+																 Telefon Instruktora
 															</label>
-					<input type="text" name="plec" class="form-control" readonly="readonly"  value="<?php echo htmlentities($data['plec']);?>">
+					<input type="text" name="nr_telefonu" class="form-control" required="required"  value="<?php echo htmlentities($data['nr_telefonu']);?>">
 														</div>
 
 <div class="form-group">
 									<label for="fess">
-																 Email użytkownika
+																 Email Instruktora
 															</label>
-					<input type="email" name="email" class="form-control"  readonly="readonly"  value="<?php echo htmlentities($data['email']);?>">
+					<input type="email" name="email_instruktora" class="form-control"  readonly="readonly"  value="<?php echo htmlentities($data['email_instruktora']);?>">
 														</div>
+
+
+
 														
 														<?php } ?>
 														
@@ -139,17 +155,13 @@ while($data=mysql_fetch_array($sql))
 											
 											</div>
 										</div>
-									<div class="col-lg-12 col-md-12">
-											<div class="panel panel-white">
-												
-												
-											</div>
-										</div>
-									</div>
+									
 								</div>
+						
 					</div>
 				</div>
 			</div>
+			
 		</div>
 		
 		<script src="vendor/jquery/jquery.min.js"></script>
@@ -159,7 +171,6 @@ while($data=mysql_fetch_array($sql))
 		<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 		<script src="vendor/switchery/switchery.min.js"></script>
 		
-		
 		<script src="vendor/maskedinput/jquery.maskedinput.min.js"></script>
 		<script src="vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
 		<script src="vendor/autosize/autosize.min.js"></script>
@@ -168,7 +179,7 @@ while($data=mysql_fetch_array($sql))
 		<script src="vendor/select2/select2.min.js"></script>
 		<script src="vendor/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 		<script src="vendor/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
-	
+		
 		<script src="assets/js/main.js"></script>
 		
 		<script src="assets/js/form-elements.js"></script>

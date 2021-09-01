@@ -12,7 +12,7 @@ if(isset($_GET['cancel']))
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Kursanci | Historia rezerwacji</title>
+		<title>Instruktor | Histria rezerwacji</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -38,6 +38,7 @@ if(isset($_GET['cancel']))
 		<div id="app">		
 <?php include('include/pasek_boczny.php');?>
 			<div class="app-content">
+				
 
 					<?php include('include/header.php');?>
 			
@@ -47,14 +48,14 @@ if(isset($_GET['cancel']))
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
-									<h1 class="mainTitle">Kursanci | Historia rezerwacji</h1>
+									<h1 class="mainTitle">Instruktor | Histria rezerwacji</h1>
 																	</div>
 								<ol class="breadcrumb">
 									<li>
-										<span>Kursanci</span>
+										<span>Instruktor</span>
 									</li>
 									<li class="active">
-										<span>Historia rezerwacji</span>
+										<span>Histria rezerwacji</span>
 									</li>
 								</ol>
 							</div>
@@ -62,7 +63,6 @@ if(isset($_GET['cancel']))
 						
 						<div class="container-fluid container-fullw bg-white">
 						
-
 									<div class="row">
 								<div class="col-md-12">
 									
@@ -72,8 +72,7 @@ if(isset($_GET['cancel']))
 										<thead>
 											<tr>
 												<th class="center">#</th>
-												<th class="hidden-xs">Imię i nazwisko instruktora</th>
-												<th>Imię i nazwisko kursanta</th>
+												<th class="hidden-xs">Imię i nazwisko kursanta</th>
 												<th>Specjalizacja</th>
 												<th>Cena</th>
 												<th>Data/godzina rezerwacji</th>
@@ -85,7 +84,7 @@ if(isset($_GET['cancel']))
 										</thead>
 										<tbody>
 <?php
-$sql=mysql_query("select instruktorzy.imie_nazwisko_instruktora as instr_name, kursanci.imie_nazwisko_kursanta as kurs_name, rezerwacje.*  from rezerwacje join instruktorzy on instruktorzy.id=rezerwacje.id_instruktora join kursanci on kursanci.id=rezerwacje.id_kursanta");
+$sql=mysql_query("select kursanci.imie_nazwisko_kursanta as fname,rezerwacje.*  from rezerwacje join kursanci on kursanci.id=rezerwacje.id_kursanta where rezerwacje.id_instruktora='".$_SESSION['id']."'");
 $cnt=1;
 while($row=mysql_fetch_array($sql))
 {
@@ -93,8 +92,7 @@ while($row=mysql_fetch_array($sql))
 
 											<tr>
 												<td class="center"><?php echo $cnt;?>.</td>
-												<td class="hidden-xs"><?php echo $row['instr_name'];?></td>
-												<td class="hidden-xs"><?php echo $row['kurs_name'];?></td>
+												<td class="hidden-xs"><?php echo $row['fname'];?></td>
 												<td><?php echo $row['specjalizacja_instruktora'];?></td>
 												<td><?php echo $row['cena'];?></td>
 												<td><?php echo $row['data_rezerwacji'];?> / <?php echo
@@ -113,7 +111,7 @@ if(($row['status_kursanta']==0) && ($row['status_instruktora']==1))
 
 if(($row['status_kursanta']==1) && ($row['status_instruktora']==0))  
 {
-	echo "Anulowany przez instruktora";
+	echo "Anulowany przez Ciebie";
 }
 
 
@@ -125,10 +123,10 @@ if(($row['status_kursanta']==1) && ($row['status_instruktora']==0))
 { ?>
 
 													
-	<a href="historia_rezerwacji.php?id=<?php echo $row['id']?>&cancel=update" onClick="return confirm('Czy na pewno chcesz odwołać to spotkanie?')"class="btn btn-transparent btn-xs tooltips" title="Cancel Appointment" tooltip-placement="top" tooltip="Remove">Anuluj</a>
+	<a href="historia_rezerwacji.php?id=<?php echo $row['id']?>&cancel=update" onClick="return confirm('Czy na pewno chcesz odwołać to spotkanie?')"class="btn btn-transparent btn-xs tooltips" title="Cancel Appointment" tooltip-placement="top" tooltip="Remove">Odwołaj</a>
 	<?php } else {
 
-		echo "Anulowano";
+		echo "Anulowany";
 		} ?>
 												</div>
 												<div class="visible-xs visible-sm hidden-md hidden-lg">
@@ -168,11 +166,10 @@ $cnt=$cnt+1;
 							</div>
 								</div>
 						
-						
 					</div>
 				</div>
 			</div>
-
+			
 		</div>
 		
 		<script src="vendor/jquery/jquery.min.js"></script>

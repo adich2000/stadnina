@@ -8,11 +8,11 @@ date_default_timezone_set('Europe/Warsaw');
 $currentTime = date( 'd-m-Y h:i:s A', time () );
 if(isset($_POST['submit']))
 {
-$sql=mysql_query("SELECT haslo FROM admin where haslo='".$_POST['cpass']."' && nazwa_uzytkownika='".$_SESSION['login']."'");
+$sql=mysql_query("SELECT haslo FROM instruktorzy where haslo='".md5($_POST['cpass'])."' && email_instruktora='".$_SESSION['dlogin']."'");
 $num=mysql_fetch_array($sql);
 if($num>0)
 {
- $con=mysql_query("update admin set haslo='".$_POST['npass']."', data_aktualizacji='$currentTime' where nazwa_uzytkownika='".$_SESSION['login']."'");
+ $con=mysql_query("update instruktorzy set haslo ='".md5($_POST['npass'])."', data_aktualizacji='$currentTime' where email_instruktora='".$_SESSION['dlogin']."'");
 $_SESSION['msg1']="Hasło zostało zmienione pomyślnie !!!";
 }
 else
@@ -24,7 +24,7 @@ $_SESSION['msg1']="Bieżące hasło jest błędne!!!";
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Admin | Zmiana hasła</title>
+		<title>Instruktor | Zmiana hasła</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -83,20 +83,18 @@ return true;
 			<div class="app-content">
 				
 						<?php include('include/header.php');?>
-		
-				</header>
-			
+						
 				<div class="main-content" >
 					<div class="wrap-content container" id="container">
 						
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
-									<h1 class="mainTitle">Admin | Zmiana hasła</h1>
+									<h1 class="mainTitle">Instruktor | Zmiana hasła</h1>
 																	</div>
 								<ol class="breadcrumb">
 									<li>
-										<span>Admin</span>
+										<span>Instruktor</span>
 									</li>
 									<li class="active">
 										<span>Zmiana hasła</span>
@@ -123,20 +121,20 @@ return true;
 															<label for="exampleInputEmail1">
 																Obecne hasło
 															</label>
-							<input type="password" name="cpass" class="form-control"  placeholder="Wprowadź obecne hasło">
+							<input type="password" name="cpass" class="form-control"  placeholder="Obecne hasło">
 														</div>
 														<div class="form-group">
 															<label for="exampleInputPassword1">
 																Nowe hasło
 															</label>
-					<input type="password" name="npass" class="form-control"  placeholder="Wprowadź nowe hasło">
+					<input type="password" name="npass" class="form-control"  placeholder="Nowe hasło">
 														</div>
 														
 <div class="form-group">
 															<label for="exampleInputPassword1">
 																Potwierdź hasło
 															</label>
-									<input type="password" name="cfpass" class="form-control"  placeholder="Potwierdź hasło">
+									<input type="password" name="cfpass" class="form-control"  placeholder="Potwierdź nowe hasło">
 														</div>
 														
 														
@@ -151,20 +149,14 @@ return true;
 											
 											</div>
 										</div>
-									<div class="col-lg-12 col-md-12">
-											<div class="panel panel-white">
-												
-												
-											</div>
-										</div>
-									</div>
+									
 								</div>
 							</div>
-						</div>
-						
+				
 					</div>
 				</div>
 			</div>
+
 		</div>
 		
 		<script src="vendor/jquery/jquery.min.js"></script>

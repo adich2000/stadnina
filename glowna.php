@@ -9,7 +9,7 @@ check_login();
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Admin | Strona główna</title>
+		<title>Instruktor | Strona główna</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -40,18 +40,17 @@ check_login();
 				
 						<?php include('include/header.php');?>
 						
-				
 				<div class="main-content" >
 					<div class="wrap-content container" id="container">
-						
+					
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
-									<h1 class="mainTitle">Admin | Strona główna</h1>
+									<h1 class="mainTitle">Instruktor | Strona główna</h1>
 																	</div>
 								<ol class="breadcrumb">
 									<li>
-										<span>Admin</span>
+										<span>Instruktor</span>
 									</li>
 									<li class="active">
 										<span>Strona główna</span>
@@ -66,15 +65,11 @@ check_login();
 									<div class="panel panel-white no-radius text-center">
 										<div class="panel-body">
 											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-smile-o fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle">Zarządzaj kursantami</h2>
+											<h2 class="StepTitle">Mój profil</h2>
 											
 											<p class="links cl-effect-1">
-												<a href="zarzadzanie_kursantami.php">
-												<?php $result = mysql_query("SELECT * FROM kursanci ");
-$num_rows = mysql_num_rows($result);
-{
-?>
-											Wszyscy kursanci :<?php echo htmlentities($num_rows);  } ?>		
+												<a href="edycja_profilu.php">
+													Zaktualizuj profil
 												</a>
 											</p>
 										</div>
@@ -83,50 +78,25 @@ $num_rows = mysql_num_rows($result);
 								<div class="col-sm-4">
 									<div class="panel panel-white no-radius text-center">
 										<div class="panel-body">
-											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-users fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle">Zarządzaj instruktorami</h2>
+											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-paperclip fa-stack-1x fa-inverse"></i> </span>
+											<h2 class="StepTitle">Moje rezerwacje</h2>
 										
 											<p class="cl-effect-1">
-												<a href="zarzadzanie_instruktorami.php">
-												<?php $result1 = mysql_query("SELECT * FROM instruktorzy ");
-$num_rows1 = mysql_num_rows($result1);
-{
-?>
-											Wszyscy instruktorzy :<?php echo htmlentities($num_rows1);  } ?>		
-												</a>
-												
-											</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="panel panel-white no-radius text-center">
-										<div class="panel-body">
-											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-terminal fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle"> Rezerwacje</h2>
-											
-											<p class="links cl-effect-1">
-												<a href="book-appointment.php">
-													<a href="historia_rezerwacji.php">
-												<?php $sql= mysql_query("SELECT * FROM rezerwacje");
-$num_rows2 = mysql_num_rows($sql);
-{
-?>
-											Wszystkie rezerwacje :<?php echo htmlentities($num_rows2);  } ?>	
-												</a>
+												<a href="historia_rezerwacji.php">
+													Historia rezerwacji
 												</a>
 											</p>
 										</div>
 									</div>
 								</div>
+								
 							</div>
 						</div>
 			
-					
 					</div>
 				</div>
 			</div>
-	
+
 		</div>
 		
 		<script src="vendor/jquery/jquery.min.js"></script>
